@@ -21,7 +21,7 @@ int main(void)
 		{
 			PWM_SetDutyCycle(i);
 			
-			// delay so as to make the user "see" the change in brightness
+			// delay so as to make the user "see" the change
 			_delay_ms(5);
 		}
 		
@@ -31,7 +31,7 @@ int main(void)
 		{
 			PWM_SetDutyCycle(i);
 			
-			// delay so as to make the user "see" the change in brightness
+			// delay so as to make the user "see" the change
 			_delay_ms(5);
 		}
 		
