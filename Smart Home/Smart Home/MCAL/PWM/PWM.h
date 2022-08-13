@@ -2,7 +2,8 @@
 #define PWM_H_
 
 void PWM_Init(void);
-void PWM_SetDutyCycle(unsigned short val);
+void PWM_SetDutyCycle_Timer0(unsigned short val);
+void PWM_SetDutyCycle_Timer2(unsigned short val);
 
 
 

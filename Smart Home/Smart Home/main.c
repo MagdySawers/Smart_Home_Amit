@@ -5,104 +5,95 @@
 #include "MCAL/DIO/DIO.h"
 #include "MCAL/ADC/ADC.h"
 #include "MCAL/PWM/PWM.h"
+#include "HAL/Servo/Servo.h"
+
+#define  F_CPU 16000000UL
+
+static float adc_last_reading;
 
 int main(void)
 {
 	UART_Init();
 	LCD_Init();
 	PWM_Init();
-	sei();
+	ADC_Init(ADC_AVcc, ADC_CK64, ADC_Channel_0);
+	Servo_Init();
 	
-	DIO_SetPinDirection(Port_d_pin_3, Output);
+	sei();        // enable global interrupts.
 	
 	while (1)
-	{	
-		for (unsigned short i = 0; i < 255; i++)
-		{
-			PWM_SetDutyCycle(i);
-			
-			// delay so as to make the user "see" the change
-			_delay_ms(5);
-		}
-		
-		_delay_ms(250);
-		
-		for (unsigned short i = 255; i > 0 ; i--)
-		{
-			PWM_SetDutyCycle(i);
-			
-			// delay so as to make the user "see" the change
-			_delay_ms(5);
-		}
-		
-		_delay_ms(250);
+	{
+		adc_last_reading = ADC_Read_NOBlock(ADC_Channel_0);        // read from channel 0 (PortA 0).
 	}
 }
 
 ISR(USART_RXC_vect)
 {
 	char dataIn = UDR;
-	LCD_SetCursorPosition(0, 0);
-	LCD_WriteChar('a');
 	
 	switch (dataIn)
 	{
 		case ('a'):
-		
-		// open door
+		Servo_90_Degrees();             // open door
 		
 		break;
 		
 		case ('b'):
-		
-		// close door
+		Servo_0_Degrees();         // close door
 		
 		break;
 		
 		case ('c'):
-		
-		// toggle lamp 1
-		DIO_TogglePin(Port_d_pin_3);      // toggle lamp 1
+		DIO_TogglePin(Port_c_pin_0);      // toggle lamp 1
 		
 		break;
 		
 		case ('d'):
-		
-		// toggle lamp 2
-		DIO_TogglePin(Port_d_pin_3);      // toggle lamp 2
+		DIO_TogglePin(Port_c_pin_1);      // toggle lamp 2
 		
 		break;
 		
 		case ('e'):
-		
-		// toggle lamp 3
-		DIO_TogglePin(Port_d_pin_3);      // toggle lamp 3
+		DIO_TogglePin(Port_c_pin_2);      // toggle lamp 3
 		
 		break;
 		
 		case ('f'):
-		
-		// toggle lamp 4
-		DIO_TogglePin(Port_d_pin_3);      // toggle lamp 4
+		DIO_TogglePin(Port_c_pin_3);      // toggle lamp 4
 		
 		break;
 		
 		case ('g'):
+		PWM_SetDutyCycle_Timer2(0);        // light off
+		
 		break;
 		
 		case ('h'):
+		PWM_SetDutyCycle_Timer2(125);        // light dimmed
+		
 		break;
 		
 		case ('i'):
-		break;
+		PWM_SetDutyCycle_Timer2(255);         // light on
 		
-		case ('j'):
-		break;
-		
-		case ('k'):
-		break;
-		
-		case ('l'):
 		break;
 	}
+}
+
+ISR(ADC_vect)
+{
+	u16 adcReading = adc_last_reading;
+	LCD_SetCursorPosition(0, 0);
+	LCD_WriteNumber(adcReading);
+	
+	float mVolt = (adcReading / 1024.0) * 5000;
+	float cel = mVolt / 10;
+	
+	if (cel > 28)
+		PWM_SetDutyCycle_Timer0(255);
+	else
+		PWM_SetDutyCycle_Timer0(0);
+	
+	LCD_SetCursorPosition(1, 0);
+	LCD_WriteNumber(cel);
 }
