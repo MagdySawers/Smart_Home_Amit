@@ -9,8 +9,6 @@
 
 #define  F_CPU 16000000UL
 
-static float adc_last_reading;
-
 int main(void)
 {
 	UART_Init();
@@ -23,7 +21,7 @@ int main(void)
 	
 	while (1)
 	{
-		adc_last_reading = ADC_Read_NOBlock(ADC_Channel_0);        // read from channel 0 (PortA 0).
+		ADC_Start_conv();
 	}
 }
 
@@ -82,7 +80,7 @@ ISR(USART_RXC_vect)
 
 ISR(ADC_vect)
 {
-	u16 adcReading = adc_last_reading;
+	u16 adcReading = ADC_Read_NOBlock(ADC_Channel_0);        // read from channel 0 (PortA 0).
 	LCD_SetCursorPosition(0, 0);
 	LCD_WriteNumber(adcReading);
 	
