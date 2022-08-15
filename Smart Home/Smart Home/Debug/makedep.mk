@@ -6,6 +6,8 @@ HAL\LCD\LCD.c
 
 HAL\Servo\Servo.c
 
+HAL\Temperature\Temperature.c
+
 main.c
 
 MCAL\ADC\ADC.c

@@ -134,6 +134,12 @@
     <Compile Include="HAL\Servo\Servo.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="HAL\Temperature\Temperature.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\Temperature\Temperature.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
@@ -174,6 +180,7 @@
   <ItemGroup>
     <Folder Include="HAL\LCD" />
     <Folder Include="HAL\Servo" />
+    <Folder Include="HAL\Temperature\" />
     <Folder Include="MCAL" />
     <Folder Include="HAL" />
     <Folder Include="MCAL\ADC" />

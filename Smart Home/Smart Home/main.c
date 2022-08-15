@@ -86,12 +86,12 @@ ISR(ADC_vect)
 	LCD_SetCursorPosition(0, 0);
 	LCD_WriteNumber(adcReading);
 	
-	int cel= Temperature_value(adcReading);
+	int cel = Temperature_value(adcReading);
 	
 	if (cel > 28)
-	//PWM_SetDutyCycle_Timer0(255);
+		PWM_SetDutyCycle_Timer0(255);
 	else
-	//PWM_SetDutyCycle_Timer0(0);
+		PWM_SetDutyCycle_Timer0(0);
 	
 	LCD_SetCursorPosition(1, 0);
 	LCD_WriteNumber(cel);
