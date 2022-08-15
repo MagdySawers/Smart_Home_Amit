@@ -1,11 +1,3 @@
-
-/*
- * ADC.c
- *
- * Created: 6/3/2022 10:10:35 AM
- *  Author: dell
- */ 
-
 #include "ADC.h"
 
 
@@ -13,7 +5,7 @@
 void ADC_Init(Enum_V v ,Enum_Prescale prescale, Enum_Channels channel)
 {
 	DDRA |= 1 << channel;
-	//Set_Pin_Direction(PortA,channel,Input); // as an input 
+	//Set_Pin_Direction(PortA,channel,Input); // as an input
 	//Set_Pin_Port(PortA,channel,0);     //no pull up
 	
 	//setting Vref
@@ -26,7 +18,7 @@ void ADC_Init(Enum_V v ,Enum_Prescale prescale, Enum_Channels channel)
 	ADCSRA &=0xF8;
 	ADCSRA |=prescale;
 	
-	//ADLAR 0 
+	//ADLAR 0
 	ClearBit(ADMUX, ADLAR);
 	
 	//Enable
@@ -43,14 +35,14 @@ u16 ADC_Read (Enum_Channels channel)
 	
 	
 	//start conversion
-	Set_Bit(ADCSRA,ADSC);
-	while(Get_Bit(ADCSRA,ADSC)==1);  // busy wait
+	SetBit(ADCSRA,ADSC);
+	while(GetBit(ADCSRA,ADSC)==1);  // busy wait
 	
 	adc= ADCL | (u16)ADCH << 8 ;
 	
 	
-	 return adc;
-	 
+	return adc;
+	
 }
 
 u16 ADC_Read_NOBlock (Enum_Channels channel)
@@ -62,9 +54,9 @@ u16 ADC_Read_NOBlock (Enum_Channels channel)
 	
 	
 	//start conversion
-   //	Set_Bit(ADCSRA,ADSC);   
+	//	Set_Bit(ADCSRA,ADSC);
 	
-   //while(Get_Bit(ADCSRA,ADSC)==1);  // busy wait
+	//while(Get_Bit(ADCSRA,ADSC)==1);  // busy wait
 	
 	adc= ADCL | (u16)ADCH << 8 ;
 	
@@ -76,7 +68,7 @@ u16 ADC_Read_NOBlock (Enum_Channels channel)
 void ADC_Start_conv(void)
 {
 	
-	Set_Bit(ADCSRA,ADSC); 
+	SetBit(ADCSRA,ADSC);
 	
 }
 
@@ -84,6 +76,6 @@ void ADC_Start_conv(void)
 void ADC_Enable_Interrupt(void)
 {
 	
-	Set_Bit(ADCSRA,3);
+	SetBit(ADCSRA,3);
 
 }
