@@ -9,13 +9,15 @@
 
 #define  F_CPU 16000000UL
 
+
 int main(void)
 {
-	UART_Init();
+	//start conversion
+	
 	LCD_Init();
-	PWM_Init();
+	
 	ADC_Init(ADC_AVcc, ADC_CK64, ADC_Channel_0);
-	Servo_Init();
+
 	
 	sei();        // enable global interrupts.
 	
@@ -32,12 +34,12 @@ ISR(USART_RXC_vect)
 	switch (dataIn)
 	{
 		case ('a'):
-		Servo_90_Degrees();             // open door
+		//Servo_90_Degrees();             // open door
 		
 		break;
 		
 		case ('b'):
-		Servo_0_Degrees();         // close door
+		//Servo_0_Degrees();         // close door
 		
 		break;
 		
@@ -62,35 +64,34 @@ ISR(USART_RXC_vect)
 		break;
 		
 		case ('g'):
-		PWM_SetDutyCycle_Timer2(0);        // light off
+		//PWM_SetDutyCycle_Timer2(0);        // light off
 		
 		break;
 		
 		case ('h'):
-		PWM_SetDutyCycle_Timer2(125);        // light dimmed
+		//PWM_SetDutyCycle_Timer2(125);        // light dimmed
 		
 		break;
 		
 		case ('i'):
-		PWM_SetDutyCycle_Timer2(255);         // light on
+		//PWM_SetDutyCycle_Timer2(255);         // light on
 		
 		break;
 	}
 }
 
 ISR(ADC_vect)
-{
-	u16 adcReading = ADC_Read_NOBlock(ADC_Channel_0);        // read from channel 0 (PortA 0).
+{   
+	u16 adcReading = ADC_Read_NOBlock(ADC_Channel_0); 
 	LCD_SetCursorPosition(0, 0);
 	LCD_WriteNumber(adcReading);
 	
-	float mVolt = (adcReading / 1024.0) * 5000;
-	float cel = mVolt / 10;
+	int cel= Temperature_value(adcReading);
 	
 	if (cel > 28)
-		PWM_SetDutyCycle_Timer0(255);
+	//PWM_SetDutyCycle_Timer0(255);
 	else
-		PWM_SetDutyCycle_Timer0(0);
+	//PWM_SetDutyCycle_Timer0(0);
 	
 	LCD_SetCursorPosition(1, 0);
 	LCD_WriteNumber(cel);
