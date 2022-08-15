@@ -86,11 +86,14 @@ ISR(ADC_vect)
 	LCD_SetCursorPosition(0, 0);
 	LCD_WriteNumber(adcReading);
 	
+	// here, we read the ADC and map it to temperature in celsiuses.
 	int cel = Temperature_value(adcReading);
 	
+	// if temperature is larger than 28, turn on air condition,
+	// if temperature is less than 21, turn off air condition,
 	if (cel > 28)
 		PWM_SetDutyCycle_Timer0(255);
-	else
+	else if (cel < 21)
 		PWM_SetDutyCycle_Timer0(0);
 	
 	LCD_SetCursorPosition(1, 0);
