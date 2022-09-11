@@ -6,7 +6,7 @@
 
 struct student
 {
-    char name[20];
+    char name[20];3333
     int age;
     int degree;
     int section;
